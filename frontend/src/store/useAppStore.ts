@@ -1,5 +1,10 @@
 import { create } from "zustand";
 import { login as loginApi } from "../api/services/auth.service";
+import {
+  getTasks as getTasksApi,
+  createTask as createTaskApi,
+  toggleTask as toggleTaskApi,
+} from "../api/services/task.service";
 
 type Filter = "all" | "completed" | "pending";
 
@@ -52,8 +57,28 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ token: null });
   },
 
-  fetchTasks: async () => {},
-  addTask: async () => {},
-  toggleTask: async () => {},
+  fetchTasks: async () => {
+    set({ loading: true });
+
+    try {
+      const data = await getTasksApi({ page: 1, limit: 10 });
+
+      set({ tasks: data, loading: false });
+    } catch (err) {
+      set({ loading: false, error: "Failed to fetch tasks" });
+    }
+  },
+
+  addTask: async (title: string) => {
+    await createTaskApi(title);
+    await get().fetchTasks();
+  },
+
+  toggleTask: async (id: number) => {
+    await toggleTaskApi(id);
+    await get().fetchTasks();
+  },
+
   setFilter: (filter) => set({ filter }),
+  
 }));
