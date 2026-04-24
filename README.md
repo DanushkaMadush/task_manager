@@ -267,9 +267,6 @@ If you use VS Code Agent Mode, it can help with code navigation, refactors, and 
 - Tasks are stored in memory (reset on backend restart).
 - JWT secret and demo credentials are hardcoded (not production-ready).
 
-## Possible Next Steps
+## Screenshots
 
-- Move JWT secret/config to environment variables.
-- Add persistence (PostgreSQL/MongoDB) and real user accounts.
-- Add frontend route protection for `/tasks`.
-- Add e2e coverage for auth + task flows.
+<img width="853" height="622" alt="2" src="https://github.com/user-attachments/assets/e08026f7-8b05-4e85-993b-c745a0eee72a" />
