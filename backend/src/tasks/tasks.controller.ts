@@ -1,34 +1,45 @@
-import { Body, Controller, Get, Param, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Patch,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
+import { JwtAuthGuard } from '../auth/jwt';
+import { CreateTaskDto, QueryTaskDto, UpdateTaskDto } from 'src/dto/task.dto';
 
 @Controller('api/v1/tasks')
 @UseGuards(JwtAuthGuard)
 export class TasksController {
-  constructor(private readonly taskService: TasksService) {}
+  constructor(private readonly tasksService: TasksService) {}
 
   @Post()
-  create(@Body() body: any) {
-    return this.taskService.create(body.title);
+  create(@Body() dto: CreateTaskDto) {
+    return this.tasksService.create(dto.title);
   }
 
   @Get()
-  findAll(@Query() query: any) {
-    return this.taskService.getAll(query);
+  findAll(@Query() query: QueryTaskDto) {
+    return this.tasksService.getAll(query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.findOne(Number(id));
+  findOne(@Param('id') id: number) {
+    return this.tasksService.findOne(id);
   }
 
   @Put()
-  update(@Body() body: any) {
-    return this.taskService.update(body.id, body.title);
+  update(@Body() dto: UpdateTaskDto) {
+    return this.tasksService.update(dto.id, dto.title);
   }
 
   @Patch(':id/toggle')
-  toggle(@Param('id') id: string) {
-    return this.taskService.toggle(Number(id));
+  toggle(@Param('id') id: number) {
+    return this.tasksService.toggle(id);
   }
 }

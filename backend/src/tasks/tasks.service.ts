@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { idCounter, tasks } from './store';
 import { Task } from './task.model';
 
@@ -6,8 +6,13 @@ let counter = idCounter;
 
 @Injectable()
 export class TasksService {
+    
   // create a new task
   create(title: string): Task {
+    if (!title) {
+      throw new BadRequestException('Title is required');
+    }
+
     const task: Task = { id: counter++, title, completed: false };
     tasks.push(task);
     return task;
@@ -37,7 +42,11 @@ export class TasksService {
   // get task by id
   findOne(id: number): Task {
     const task = tasks.find((task) => task.id === id);
-    if (!task) throw new NotFoundException('Task not found');
+
+    if (!task) {
+      throw new NotFoundException(`Task with id ${id} not found`);
+    }
+
     return task;
   }
 
