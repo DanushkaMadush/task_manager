@@ -8,6 +8,7 @@ import {
   Patch,
   Query,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { JwtAuthGuard } from '../auth/jwt';
@@ -42,4 +43,10 @@ export class TasksController {
   toggle(@Param('id') id: number) {
     return this.tasksService.toggle(id);
   }
+
+  @Delete(':id')
+  delete(@Param('id') id: number) {
+    return this.tasksService.delete(id);
+  }
+  
 }

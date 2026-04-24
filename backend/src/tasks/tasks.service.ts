@@ -6,7 +6,6 @@ let counter = idCounter;
 
 @Injectable()
 export class TasksService {
-    
   // create a new task
   create(title: string): Task {
     if (!title) {
@@ -62,5 +61,21 @@ export class TasksService {
     const task = this.findOne(id);
     task.completed = !task.completed;
     return task;
+  }
+
+  // delete task
+  delete(id: number) {
+    const index = tasks.findIndex((t) => t.id === id);
+
+    if (index === -1) {
+      throw new NotFoundException(`Task with id ${id} not found`);
+    }
+
+    const deleted = tasks[index];
+    tasks.splice(index, 1);
+    return {
+      message: 'Task deleted successfully',
+      task: deleted,
+    };
   }
 }
