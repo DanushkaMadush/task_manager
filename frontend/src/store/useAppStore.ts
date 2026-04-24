@@ -58,10 +58,11 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   fetchTasks: async () => {
+    const { filter } = get();
     set({ loading: true });
 
     try {
-      const data = await getTasksApi({ page: 1, limit: 10 });
+      const data = await getTasksApi({ page: 1, limit: 10, status: filter, });
 
       set({ tasks: data, loading: false });
     } catch (err) {
@@ -79,6 +80,9 @@ export const useAppStore = create<AppState>((set, get) => ({
     await get().fetchTasks();
   },
 
-  setFilter: (filter) => set({ filter }),
-  
+  setFilter: async (filter) => {
+    set({ filter });
+    await get().fetchTasks();
+  },
+
 }));

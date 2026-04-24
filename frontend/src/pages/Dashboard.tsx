@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import TaskCard from '../components/TaskCard';
+import FilterBar from '../components/FilterBar';
 
 export default function Dashboard() {
-  const { tasks, fetchTasks, addTask, toggleTask, loading } = useAppStore();
 
+  const { tasks, fetchTasks, addTask, toggleTask, loading } = useAppStore();
   const [title, setTitle] = useState('');
 
   useEffect(() => {
@@ -22,6 +23,9 @@ export default function Dashboard() {
       <div className="max-w-xl mx-auto">
         {/* Header */}
         <h1 className="text-2xl text-white mb-6">Task Dashboard</h1>
+
+        {/* Filter */}
+        <FilterBar />
 
         {/* Add Task */}
         <div className="flex gap-2 mb-6">
