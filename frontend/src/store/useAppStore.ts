@@ -4,6 +4,8 @@ import {
   getTasks as getTasksApi,
   createTask as createTaskApi,
   toggleTask as toggleTaskApi,
+  updateTask as updateTaskApi,
+  deleteTask as deleteTaskApi,
 } from "../api/services/task.service";
 
 type Filter = "all" | "completed" | "pending";
@@ -21,6 +23,8 @@ interface AppState {
   addTask: (title: string) => Promise<void>;
   toggleTask: (id: number) => Promise<void>;
   setFilter: (filter: Filter) => void;
+  updateTask: (id: number, title: string) => Promise<void>;
+  deleteTask: (id: number) => Promise<void>;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -62,7 +66,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ loading: true });
 
     try {
-      const data = await getTasksApi({ page: 1, limit: 10, status: filter, });
+      const data = await getTasksApi({ page: 1, limit: 10, status: filter });
 
       set({ tasks: data, loading: false });
     } catch (err) {
@@ -82,6 +86,16 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   setFilter: async (filter) => {
     set({ filter });
+    await get().fetchTasks();
+  },
+
+  updateTask: async (id: number, title: string) => {
+    await updateTaskApi(id, title);
+    await get().fetchTasks();
+  },
+
+  deleteTask: async (id: number) => {
+    await deleteTaskApi(id);
     await get().fetchTasks();
   },
 
